@@ -53,11 +53,12 @@ class ImageUtils:
     @staticmethod
     def imsave(image_ndarray: np.ndarray, path: str):
         image_ndarray = np.asarray(image_ndarray)
-        # Convert CZYX to ZYXC for saving (volwrite expects ZYXC for 4D)
+        # Convert CZYX to ZCYX for saving
         if image_ndarray.ndim == 4:
-            # Transform CZYX to ZYXC by moving C axis to the end
-            image_ndarray = np.moveaxis(image_ndarray, 0, -1)
-            iio.volwrite(path, image_ndarray)
+            # Transform CZYX to ZCYX by swapping axes 0 and 1
+            image_ndarray = np.moveaxis(image_ndarray, [0, 1], [1, 0])
+            # Save as multi-page TIFF
+            iio.mimwrite(path, image_ndarray)
         elif image_ndarray.ndim == 3:
             iio.volwrite(path, image_ndarray)
         else:
