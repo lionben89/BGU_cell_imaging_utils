@@ -1,6 +1,6 @@
 import setuptools
 
-__version__ = '1.15.6'
+__version__ = '1.15.7'
 
 with open("README.md", "r") as fh:
     readme = fh.read()
@@ -8,7 +8,7 @@ with open("README.md", "r") as fh:
 requirements = [
     "matplotlib",
     "numpy",
-    "tifffile",
+    "imageio",
     "scikit-image>=0.16.2",
     "quilt3",
     "bumpversion",

@@ -19,11 +19,10 @@ if not os.path.exists(results_save_dir):
 
 def test_image_utils() -> None:
     image = ImageUtils.imread("{}\\{}\\{}".format(images_save_dir,organelle_name,image_file_name))
-    print(ImageUtils.get_channel_names(image))
     image_ndarray = ImageUtils.normalize(ImageUtils.image_to_ndarray(image))
-    # bf_image = ImageUtils.get_channel(image,3)
-    # fl_image = ImageUtils.get_channel(image_ndarray,2)
-    # n_image = ImageUtils.add_channel(bf_image,fl_image)
+    bf_image = ImageUtils.get_channel(image,3)
+    fl_image = ImageUtils.get_channel(image_ndarray,2)[0]
+    n_image = ImageUtils.add_channel(bf_image,fl_image)
     # print(n_image.shape)
     # ImageUtils.imsave(n_image,"{}\\{}\\{}".format(images_save_dir,organelle_name,result_image_file_name))
     # test_image = ImageUtils.imread(n_image)

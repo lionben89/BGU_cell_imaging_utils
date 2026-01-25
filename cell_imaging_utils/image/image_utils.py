@@ -2,7 +2,7 @@ from os import stat
 import numpy as np
 import logging
 import typing
-import tifffile
+import imageio as iio
 
 
 log = logging.getLogger(__name__)
@@ -29,12 +29,37 @@ class ImageUtils:
     def imread(image: typing.Union[np.ndarray, str]) -> np.ndarray:
         """Read image from file or return ndarray as-is"""
         if isinstance(image, str):
-            return tifffile.imread(image)
+            # Assume images on disk are already CZYX or can be wrapped as CZYX
+            try:
+                arr = iio.volread(image)
+            except Exception:
+                arr = iio.imread(image)
+
+            arr = np.asarray(arr)
+            if arr.ndim == 2:
+                # YX -> C=1, Z=1, Y, X
+                arr = arr[np.newaxis, np.newaxis, :, :]
+            elif arr.ndim == 3:
+                # Assume ZYX -> add C=1
+                arr = arr[np.newaxis, :, :, :]
+            elif arr.ndim == 4:
+                # Assume already CZYX
+                pass
+            else:
+                raise ValueError("Unsupported image dimensions for CZYX assumption")
+            return arr
         return image
 
     @staticmethod
     def imsave(image_ndarray: np.ndarray, path: str):
-        tifffile.imsave(path, image_ndarray, image_ndarray.shape)
+        image_ndarray = np.asarray(image_ndarray)
+        # Directly write assuming input is CZYX (or ZYX)
+        if image_ndarray.ndim == 4:
+            iio.volwrite(path, image_ndarray)
+        elif image_ndarray.ndim == 3:
+            iio.volwrite(path, image_ndarray)
+        else:
+            iio.imwrite(path, image_ndarray)
 
     @staticmethod
     def get_channel(image_ndarray: np.ndarray, channel_index: int) -> np.ndarray:
