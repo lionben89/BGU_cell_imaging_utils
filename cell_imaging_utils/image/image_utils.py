@@ -27,9 +27,9 @@ class ImageUtils:
 
     @staticmethod
     def imread(image: typing.Union[np.ndarray, str]) -> np.ndarray:
-        """Read image from file or return ndarray as-is"""
+        """Read image from file or return ndarray as-is. Converts ZCYX to CZYX format."""
         if isinstance(image, str):
-            # Assume images on disk are already CZYX or can be wrapped as CZYX
+            # Read image from disk
             try:
                 arr = iio.volread(image)
             except Exception:
@@ -43,8 +43,8 @@ class ImageUtils:
                 # Assume ZYX -> add C=1
                 arr = arr[np.newaxis, :, :, :]
             elif arr.ndim == 4:
-                # Assume already CZYX
-                pass
+                # Transform ZCYX to CZYX by swapping axes 0 and 1
+                arr = np.moveaxis(arr, [0, 1], [1, 0])
             else:
                 raise ValueError("Unsupported image dimensions for CZYX assumption")
             return arr
