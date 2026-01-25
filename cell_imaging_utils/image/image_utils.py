@@ -1,11 +1,8 @@
 from os import stat
-import aicsimageio
 import numpy as np
 import logging
 import typing
 import tifffile
-from aicsimageio import AICSImage, aics_image
-from multipledispatch import dispatch
 
 
 log = logging.getLogger(__name__)
@@ -22,31 +19,24 @@ SpatialY= 'Y'
 SpatialZ= 'Z'
 Time= 'T'
 
-Two main functions params are
-image - AICSImage ("STCZYX")
-image_ndarray - np.ndarray ("CZYX")
+All functions operate on np.ndarray in "CZYX" format
 """
 
 
 class ImageUtils:
 
     @staticmethod
-    def imread(image: typing.Union[np.ndarray, str]) -> AICSImage:
-        with AICSImage(image) as img:
-            img.size_z
-            return img
+    def imread(image: typing.Union[np.ndarray, str]) -> np.ndarray:
+        """Read image from file or return ndarray as-is"""
+        if isinstance(image, str):
+            return tifffile.imread(image)
+        return image
 
     @staticmethod
     def imsave(image_ndarray: np.ndarray, path: str):
         tifffile.imsave(path, image_ndarray, image_ndarray.shape)
 
     @staticmethod
-    @dispatch(AICSImage, int)
-    def get_channel(image: AICSImage, channel_index: int) -> np.ndarray:
-        return image.get_image_data("CZYX")[channel_index:channel_index+1, :, :, :]
-
-    @staticmethod
-    @dispatch(np.ndarray, int)
     def get_channel(image_ndarray: np.ndarray, channel_index: int) -> np.ndarray:
         return image_ndarray[channel_index:channel_index+1, :, :, :]
 
@@ -56,12 +46,9 @@ class ImageUtils:
         return new_image_ndarray
 
     @staticmethod
-    def image_to_ndarray(image):
-        return image.get_image_data("CZYX")
-
-    @staticmethod
-    def get_channel_names(image):
-        return image.get_channel_names()
+    def image_to_ndarray(image_ndarray: np.ndarray) -> np.ndarray:
+        """Identity function - returns the input ndarray as-is"""
+        return image_ndarray
 
     """
     Normalize all values between 0 to max_value

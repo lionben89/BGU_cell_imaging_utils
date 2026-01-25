@@ -1,6 +1,6 @@
 import setuptools
 
-__version__ = '1.15.1'
+__version__ = '1.15.3'
 
 with open("README.md", "r") as fh:
     readme = fh.read()
@@ -10,7 +10,6 @@ requirements = [
     "numpy",
     "tifffile",
     "scikit-image>=0.16.2",
-    "aicsimageio==3.0.7",
     "quilt3",
     "bumpversion",
     "twine",

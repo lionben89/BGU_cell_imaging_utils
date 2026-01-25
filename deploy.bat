@@ -16,4 +16,4 @@ git add .
 git commit -m "bumping version %version% with %category%"
 git push
 echo uploading to pip...
-twine upload dist/*
+twine upload dist/* --verbose
