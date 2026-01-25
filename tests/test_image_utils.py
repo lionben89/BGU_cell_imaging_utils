@@ -27,12 +27,12 @@ def test_image_utils() -> None:
     # ImageUtils.imsave(n_image,"{}\\{}\\{}".format(images_save_dir,organelle_name,result_image_file_name))
     # test_image = ImageUtils.imread(n_image)
     # test_image = ImageUtils.normalize(test_image)
-    mask_template = ImageUtils.get_channel(image_ndarray,5)
-    test_image = ImageUtils.crop_edges(image_ndarray,mask_template)
+    # mask_template = ImageUtils.get_channel(image_ndarray,5)
+    # test_image = ImageUtils.crop_edges(image_ndarray,mask_template)
     
     # test_image = ImageUtils.project_to_2d(image_ndarray)
     # indexes
-    ImageUtils.imsave(test_image,"{}\\{}\\{}".format(images_save_dir,organelle_name,result_image_file_name))
+    ImageUtils.imsave(n_image,"{}\\{}\\{}".format(images_save_dir,organelle_name,result_image_file_name))
 
     return None
 
