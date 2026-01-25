@@ -43,10 +43,9 @@ class ImageUtils:
     @staticmethod
     def add_channel(image_ndarray: np.ndarray, channel) -> np.ndarray:
         # Ensure channel has the same number of dimensions as image_ndarray
-        channel = np.asarray(channel)
         
         # If channel is 3D (ZYX) and image is 4D (CZYX), add channel dimension
-        if channel.ndim == 3 and image_ndarray.ndim == 4:
+        if channel.ndim < image_ndarray.ndim:
             channel = np.expand_dims(channel, axis=0)
         
         new_image_ndarray = np.append(image_ndarray, channel, axis=0)
