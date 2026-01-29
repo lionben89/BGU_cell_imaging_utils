@@ -30,7 +30,7 @@ class ImageUtils:
         """Read image from file or return ndarray as-is. Converts ZCYX to CZYX format."""
         if isinstance(image, str):
             # Read image from disk
-            if arr.ndim == 2 or arr.ndim == 3
+            if arr.ndim == 2 or arr.ndim == 3:
                 try:
                     arr = iio.volread(image)
                 except Exception:
