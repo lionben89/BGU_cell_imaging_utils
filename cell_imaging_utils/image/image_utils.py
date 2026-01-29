@@ -31,9 +31,11 @@ class ImageUtils:
         if isinstance(image, str):
             # Read image from disk
             try:
-                arr = iio.mvolread(image)
+                arr = iio.imread(image)
+                if arr.ndim != 4:
+                    arr = iio.mimread(image)
             except Exception:
-                arr = iio.mimread(image)
+                print("Could not read image as multi-page tiff, 4D assumed")
                     
             arr = np.asarray(arr)
             if arr.ndim == 2:
