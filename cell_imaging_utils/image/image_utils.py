@@ -44,11 +44,6 @@ class ImageUtils:
             elif arr.ndim == 3:
                 # Assume ZYX -> add C=1
                 arr = arr[np.newaxis, :, :, :]
-            elif arr.ndim == 4:
-                # Transform ZCYX to CZYX by swapping axes 0 and 1
-                arr = np.moveaxis(arr, [0, 1], [1, 0])
-            else:
-                raise ValueError("Unsupported image dimensions for CZYX assumption")
             return arr
         return image
 
@@ -57,12 +52,8 @@ class ImageUtils:
         image_ndarray = np.asarray(image_ndarray)
         # Convert CZYX to ZCYX for saving
         if image_ndarray.ndim == 4:
-            # Transform CZYX to ZCYX by swapping axes 0 and 1
-            image_ndarray = np.moveaxis(image_ndarray, [0, 1], [1, 0])
             # Save as multi-page TIFF
             iio.mimwrite(path, image_ndarray)
-        elif image_ndarray.ndim == 3:
-            iio.volwrite(path, image_ndarray)
         else:
             iio.imwrite(path, image_ndarray)
 
