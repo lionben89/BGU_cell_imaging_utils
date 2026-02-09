@@ -33,7 +33,7 @@ class ImageUtils:
             try:
                 arr = iio.imread(image)
                 if arr.ndim != 4:
-                    arr = iio.mimread(image)
+                    arr = iio.mvolread(image)
             except Exception:
                 print("Could not read image as multi-page tiff, 4D assumed")
                     
@@ -50,7 +50,7 @@ class ImageUtils:
     @staticmethod
     def imsave(image_ndarray: np.ndarray, path: str):
         image_ndarray = np.asarray(image_ndarray)
-        # Convert CZYX to ZCYX for saving
+        # Save in CZYX
         if image_ndarray.ndim == 4:
             # Save as multi-page TIFF
             iio.mimwrite(path, image_ndarray)
